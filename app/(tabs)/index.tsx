@@ -1,8 +1,18 @@
 import { FestivalCard } from '@/components/festival-card';
 import { Header } from '@/components/header';
 import MusicInfoButtons from '@/components/music-info-buttons';
+import { Colors } from '@/constants/theme';
+import { Image } from 'expo-image';
+import { router } from 'expo-router';
 import { useRef, useState } from 'react';
-import { Dimensions, ScrollView, StyleSheet, View } from 'react-native';
+import {
+    Dimensions,
+    Linking,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    View,
+} from 'react-native';
 
 const { width } = Dimensions.get('window');
 
@@ -38,54 +48,83 @@ export default function HomeScreen() {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={styles.wrapper}>
             <Header />
-            <ScrollView
-                ref={scrollViewRef}
-                horizontal
-                pagingEnabled
-                showsHorizontalScrollIndicator={false}
-                onScroll={handleScroll}
-                scrollEventThrottle={16}
-                contentContainerStyle={styles.scrollContent}
-                decelerationRate="fast"
-            >
-                {festivals.map(item => (
-                    <View key={item.id} style={styles.cardContainer}>
-                        <FestivalCard {...item} />
-                        <MusicInfoButtons id={item.id} />
-                    </View>
-                ))}
-            </ScrollView>
-
-            <View style={styles.pagination}>
-                {festivals.map((_, index) => (
-                    <View
-                        key={index}
-                        style={[
-                            styles.dot,
-                            index === activeIndex && styles.activeDot,
-                        ]}
+            <View style={styles.container}>
+                <Pressable
+                    style={styles.bannerContainer}
+                    onPress={() => Linking.openURL('https://www.festimap.kr')}
+                >
+                    <Image
+                        style={styles.banner}
+                        source={require('@/assets/images/banner.webp')}
                     />
-                ))}
+                </Pressable>
+                <ScrollView
+                    ref={scrollViewRef}
+                    horizontal
+                    pagingEnabled
+                    showsHorizontalScrollIndicator={false}
+                    onScroll={handleScroll}
+                    scrollEventThrottle={16}
+                    contentContainerStyle={styles.scrollContent}
+                    decelerationRate="fast"
+                >
+                    {festivals.map(item => (
+                        <Pressable
+                            key={item.id}
+                            style={styles.cardContainer}
+                            onPress={() =>
+                                router.push(`/festival-info/${item.id}` as any)
+                            }
+                        >
+                            <FestivalCard {...item} />
+                            <MusicInfoButtons id={item.id} />
+                        </Pressable>
+                    ))}
+                </ScrollView>
+
+                <View style={styles.pagination}>
+                    {festivals.map((_, index) => (
+                        <View
+                            key={index}
+                            style={[
+                                styles.dot,
+                                index === activeIndex && styles.activeDot,
+                            ]}
+                        />
+                    ))}
+                </View>
             </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
+    wrapper: {
         flex: 1,
         backgroundColor: '#f5f5f5',
     },
+    container: {
+        flex: 1,
+        paddingTop: 30,
+    },
+    bannerContainer: { width: '100%', paddingHorizontal: 20, marginBottom: 20 },
+    banner: {
+        width: '100%',
+        height: 80,
+        resizeMode: 'cover',
+        borderRadius: 8,
+    },
     scrollContent: {
-        paddingVertical: 20,
+        marginBottom: 20,
     },
     cardContainer: {
         width: width,
         alignItems: 'center',
         justifyContent: 'center',
         paddingHorizontal: 20,
+        gap: 20,
     },
     pagination: {
         flexDirection: 'row',
@@ -101,6 +140,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#d1d5db',
     },
     activeDot: {
-        backgroundColor: '#ef4444',
+        backgroundColor: Colors.light.tint,
     },
 });

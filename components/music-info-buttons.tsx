@@ -16,6 +16,7 @@ export default function MusicInfoButtons({ id }: MusicInfoButtonsProps) {
                 <MaterialIcons name="info" size={20} color="#666" />
                 <Text style={styles.actionText}>행사정보</Text>
             </TouchableOpacity>
+            <View style={styles.verticalDivider} />
             <TouchableOpacity
                 style={styles.actionButton}
                 onPress={() => router.push(`/music/${id}` as any)}
@@ -32,13 +33,10 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: 'white',
         flexDirection: 'row',
-        borderTopWidth: 1,
-        borderTopColor: '#e5e7eb',
         borderRadius: 8,
     },
     actionButton: {
         flex: 1,
-        flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
         paddingVertical: 16,
@@ -47,5 +45,10 @@ const styles = StyleSheet.create({
     actionText: {
         color: '#666',
         fontSize: 14,
+    },
+    verticalDivider: {
+        width: 1,
+        backgroundColor: '#eee',
+        marginVertical: 12,
     },
 });

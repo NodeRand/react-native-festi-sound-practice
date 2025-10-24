@@ -27,6 +27,7 @@ export default function RootLayout() {
                     name="festival-info"
                     options={{ headerShown: false }}
                 />
+                <Stack.Screen name="music" options={{ headerShown: false }} />
                 <Stack.Screen
                     name="modal"
                     options={{ presentation: 'modal', title: 'Modal' }}

@@ -1,6 +1,5 @@
-import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
-
-const { width } = Dimensions.get('window');
+import { Colors } from '@/constants/theme';
+import { Image, StyleSheet, Text, View } from 'react-native';
 
 type FestivalStatus = 'ongoing' | 'ended';
 
@@ -37,7 +36,7 @@ export function FestivalCard({
                         ]}
                     >
                         <Text style={styles.badgeText}>
-                            {isOngoing ? '행사종료' : '축제중'}
+                            {isOngoing ? '축제중' : '종료됨'}
                         </Text>
                     </View>
                 </View>
@@ -53,18 +52,19 @@ export function FestivalCard({
 
 const styles = StyleSheet.create({
     card: {
-        width: width - 40,
+        width: '100%',
+        aspectRatio: 7 / 8,
         borderRadius: 16,
         overflow: 'hidden',
         backgroundColor: '#fff',
     },
     image: {
         width: '100%',
-        height: 400,
+        height: '100%',
     },
     overlay: {
         position: 'absolute',
-        bottom: 80,
+        bottom: 0,
         left: 0,
         right: 0,
         padding: 20,
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
         borderRadius: 6,
     },
     badgeOngoing: {
-        backgroundColor: '#22c55e',
+        backgroundColor: Colors.light.tint,
     },
     badgeEnded: {
         backgroundColor: '#9ca3af',
