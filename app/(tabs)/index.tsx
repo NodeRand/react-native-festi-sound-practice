@@ -1,5 +1,5 @@
-import { Header } from '@/components/Header';
 import { FestivalCard } from '@/components/festival-card';
+import { Header } from '@/components/header';
 import MusicInfoButtons from '@/components/music-info-buttons';
 import { useRef, useState } from 'react';
 import { Dimensions, ScrollView, StyleSheet, View } from 'react-native';
