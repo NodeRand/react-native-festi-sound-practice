@@ -40,7 +40,6 @@ export default function HomeScreen() {
     return (
         <View style={styles.container}>
             <Header />
-
             <ScrollView
                 ref={scrollViewRef}
                 horizontal
