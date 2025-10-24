@@ -3,14 +3,14 @@ import React from 'react';
 
 import { AnimatedTabButton } from '@/components/animated-tab-button';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import { mainColor } from '@/constants/theme';
+import { Colors } from '@/constants/theme';
 
 export default function TabLayout() {
     return (
         <Tabs
             screenOptions={{
-                tabBarActiveTintColor: mainColor, // 초록색으로 변경
-                tabBarInactiveTintColor: '#9ca3af', // 비활성 색상
+                tabBarActiveTintColor: Colors.light.tabIconSelected, // 초록색으로 변경
+                tabBarInactiveTintColor: Colors.light.tabIconDefault, // 비활성 색상
                 headerShown: false,
                 tabBarButton: AnimatedTabButton,
                 tabBarShowLabel: true, // 라벨 표시 활성화

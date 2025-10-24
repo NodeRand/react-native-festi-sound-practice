@@ -1,115 +1,145 @@
+import { FestivalCard } from '@/components/festival-card';
+import { Header } from '@/components/header';
+import MusicInfoButtons from '@/components/music-info-buttons';
+import { Colors } from '@/constants/theme';
 import { Image } from 'expo-image';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { router } from 'expo-router';
+import { useRef, useState } from 'react';
+import {
+    Dimensions,
+    Linking,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    View,
+} from 'react-native';
 
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+const { width } = Dimensions.get('window');
+
+const festivals = [
+    {
+        id: '1',
+        title: '2025 울산불꽃축제',
+        date: '2025년 10월 19일(일)',
+        time: '18:00 ~ 20:40',
+        location: '울산광역시 북구 강동몽돌해변',
+        image: require('@/assets/images/partial-react-logo.png'),
+        status: 'ongoing' as const,
+    },
+    {
+        id: '2',
+        title: '2025 하이원 레이저 불꽃쇼',
+        date: '2025년 7월 26일(토)~12월 31일',
+        time: '19:00 ~ 20:00',
+        location: '하이원 그랜드호텔 잔디광장',
+        image: require('@/assets/images/partial-react-logo.png'),
+        status: 'ended' as const,
+    },
+];
 
 export default function HomeScreen() {
-    return (
-        <ParallaxScrollView
-            headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-            headerImage={
-                <Image
-                    source={require('@/assets/images/partial-react-logo.png')}
-                    style={styles.reactLogo}
-                />
-            }
-        >
-            <View>
-                <Text className="text-greengreen">
-                    HELLO GUYS!
-                    {'\n'}
-                    THIS IS FOR
-                    {'\n'}NATIVEWIND TEST TEXT
-                </Text>
-            </View>
-            <ThemedView style={styles.stepContainer}>
-                <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-                <ThemedText>
-                    Edit{' '}
-                    <ThemedText type="defaultSemiBold">
-                        app/(tabs)/index.tsx
-                    </ThemedText>{' '}
-                    to see changes. Press{' '}
-                    <ThemedText type="defaultSemiBold">
-                        {Platform.select({
-                            ios: 'cmd + d',
-                            android: 'cmd + m',
-                            web: 'F12',
-                        })}
-                    </ThemedText>{' '}
-                    to open developer tools.
-                </ThemedText>
-            </ThemedView>
-            <ThemedView style={styles.stepContainer}>
-                <Link href="/modal">
-                    <Link.Trigger>
-                        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-                    </Link.Trigger>
-                    <Link.Preview />
-                    <Link.Menu>
-                        <Link.MenuAction
-                            title="Action"
-                            icon="cube"
-                            onPress={() => alert('Action pressed')}
-                        />
-                        <Link.MenuAction
-                            title="Share"
-                            icon="square.and.arrow.up"
-                            onPress={() => alert('Share pressed')}
-                        />
-                        <Link.Menu title="More" icon="ellipsis">
-                            <Link.MenuAction
-                                title="Delete"
-                                icon="trash"
-                                destructive
-                                onPress={() => alert('Delete pressed')}
-                            />
-                        </Link.Menu>
-                    </Link.Menu>
-                </Link>
+    const [activeIndex, setActiveIndex] = useState(0);
+    const scrollViewRef = useRef<ScrollView>(null);
 
-                <ThemedText>
-                    {`Tap the Explore tab to learn more about what's included in this starter app.`}
-                </ThemedText>
-            </ThemedView>
-            <ThemedView style={styles.stepContainer}>
-                <ThemedText type="subtitle">
-                    Step 3: Get a fresh start
-                </ThemedText>
-                <ThemedText>
-                    {`When you're ready, run `}
-                    <ThemedText type="defaultSemiBold">
-                        npm run reset-project
-                    </ThemedText>{' '}
-                    to get a fresh{' '}
-                    <ThemedText type="defaultSemiBold">app</ThemedText>{' '}
-                    directory. This will move the current{' '}
-                    <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-                    <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-                </ThemedText>
-            </ThemedView>
-        </ParallaxScrollView>
+    const handleScroll = (event: any) => {
+        const scrollPosition = event.nativeEvent.contentOffset.x;
+        const index = Math.round(scrollPosition / width);
+        setActiveIndex(index);
+    };
+
+    return (
+        <View style={styles.wrapper}>
+            <Header />
+            <View style={styles.container}>
+                <Pressable
+                    style={styles.bannerContainer}
+                    onPress={() => Linking.openURL('https://www.festimap.kr')}
+                >
+                    <Image
+                        style={styles.banner}
+                        source={require('@/assets/images/banner.webp')}
+                    />
+                </Pressable>
+                <ScrollView
+                    ref={scrollViewRef}
+                    horizontal
+                    pagingEnabled
+                    showsHorizontalScrollIndicator={false}
+                    onScroll={handleScroll}
+                    scrollEventThrottle={16}
+                    contentContainerStyle={styles.scrollContent}
+                    decelerationRate="fast"
+                >
+                    {festivals.map(item => (
+                        <Pressable
+                            key={item.id}
+                            style={styles.cardContainer}
+                            onPress={() =>
+                                router.push(`/festival-info/${item.id}` as any)
+                            }
+                        >
+                            <FestivalCard {...item} />
+                            <MusicInfoButtons id={item.id} />
+                        </Pressable>
+                    ))}
+                </ScrollView>
+
+                <View style={styles.pagination}>
+                    {festivals.map((_, index) => (
+                        <View
+                            key={index}
+                            style={[
+                                styles.dot,
+                                index === activeIndex && styles.activeDot,
+                            ]}
+                        />
+                    ))}
+                </View>
+            </View>
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
-    titleContainer: {
-        flexDirection: 'row',
+    wrapper: {
+        flex: 1,
+        backgroundColor: '#f5f5f5',
+    },
+    container: {
+        flex: 1,
+        paddingTop: 30,
+    },
+    bannerContainer: { width: '100%', paddingHorizontal: 20, marginBottom: 20 },
+    banner: {
+        width: '100%',
+        height: 80,
+        resizeMode: 'cover',
+        borderRadius: 8,
+    },
+    scrollContent: {
+        marginBottom: 20,
+    },
+    cardContainer: {
+        width: width,
         alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 20,
+        gap: 20,
+    },
+    pagination: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: 20,
         gap: 8,
     },
-    stepContainer: {
-        gap: 8,
-        marginBottom: 8,
+    dot: {
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+        backgroundColor: '#d1d5db',
     },
-    reactLogo: {
-        height: 178,
-        width: 290,
-        bottom: 0,
-        left: 0,
-        position: 'absolute',
+    activeDot: {
+        backgroundColor: Colors.light.tint,
     },
 });
