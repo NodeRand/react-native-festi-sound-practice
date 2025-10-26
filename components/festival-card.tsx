@@ -1,5 +1,6 @@
 import { Colors } from '@/constants/theme';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { router } from 'expo-router';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 type FestivalStatus = 'ongoing' | 'ended';
 
@@ -14,6 +15,7 @@ interface FestivalCardProps {
 }
 
 export function FestivalCard({
+    id,
     title,
     date,
     time,
@@ -24,7 +26,10 @@ export function FestivalCard({
     const isOngoing = status === 'ongoing';
 
     return (
-        <View style={styles.card}>
+        <Pressable
+            style={styles.card}
+            onPress={() => router.push(`/festival-info/${id}` as any)}
+        >
             <Image source={image} style={styles.image} resizeMode="cover" />
             <View style={styles.overlay}>
                 <View style={styles.header}>
@@ -46,7 +51,7 @@ export function FestivalCard({
                 <Text style={styles.time}>{time}</Text>
                 <Text style={styles.location}>{location}</Text>
             </View>
-        </View>
+        </Pressable>
     );
 }
 

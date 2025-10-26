@@ -1,19 +1,22 @@
 import { Colors } from '@/constants/theme';
 import { Image, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export function Header() {
     return (
-        <View style={styles.header}>
-            <Image
-                source={require('@/assets/images/logo.png')}
-                style={styles.logoImg}
-                resizeMode="cover"
-            />
-            <Text style={styles.logoTextBox}>
-                <Text style={styles.logoOrange}>FESTI </Text>
-                <Text style={styles.logoBlack}>SOUND</Text>
-            </Text>
-        </View>
+        <SafeAreaView edges={['top']}>
+            <View style={styles.header}>
+                <Image
+                    source={require('@/assets/images/logo.png')}
+                    style={styles.logoImg}
+                    resizeMode="cover"
+                />
+                <Text style={styles.logoTextBox}>
+                    <Text style={styles.logoOrange}>FESTI </Text>
+                    <Text style={styles.logoBlack}>SOUND</Text>
+                </Text>
+            </View>
+        </SafeAreaView>
     );
 }
 

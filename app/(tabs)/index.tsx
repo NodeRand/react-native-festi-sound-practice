@@ -3,7 +3,6 @@ import { Header } from '@/components/header';
 import MusicInfoButtons from '@/components/music-info-buttons';
 import { Colors } from '@/constants/theme';
 import { Image } from 'expo-image';
-import { router } from 'expo-router';
 import { useRef, useState } from 'react';
 import {
     Dimensions,
@@ -51,39 +50,39 @@ export default function HomeScreen() {
         <View style={styles.wrapper}>
             <Header />
             <View style={styles.container}>
-                <Pressable
-                    style={styles.bannerContainer}
-                    onPress={() => Linking.openURL('https://www.festimap.kr')}
-                >
-                    <Image
-                        style={styles.banner}
-                        source={require('@/assets/images/banner.webp')}
-                    />
-                </Pressable>
                 <ScrollView
-                    ref={scrollViewRef}
-                    horizontal
-                    pagingEnabled
-                    showsHorizontalScrollIndicator={false}
-                    onScroll={handleScroll}
-                    scrollEventThrottle={16}
-                    contentContainerStyle={styles.scrollContent}
-                    decelerationRate="fast"
+                    style={styles.outerScroll}
+                    showsVerticalScrollIndicator={false}
                 >
-                    {festivals.map(item => (
-                        <Pressable
-                            key={item.id}
-                            style={styles.cardContainer}
-                            onPress={() =>
-                                router.push(`/festival-info/${item.id}` as any)
-                            }
-                        >
-                            <FestivalCard {...item} />
-                            <MusicInfoButtons id={item.id} />
-                        </Pressable>
-                    ))}
+                    <Pressable
+                        style={styles.bannerContainer}
+                        onPress={() =>
+                            Linking.openURL('https://www.festimap.kr')
+                        }
+                    >
+                        <Image
+                            style={styles.banner}
+                            source={require('@/assets/images/banner.webp')}
+                        />
+                    </Pressable>
+                    <ScrollView
+                        ref={scrollViewRef}
+                        horizontal
+                        pagingEnabled
+                        showsHorizontalScrollIndicator={false}
+                        onScroll={handleScroll}
+                        scrollEventThrottle={16}
+                        contentContainerStyle={styles.scrollContent}
+                        decelerationRate="fast"
+                    >
+                        {festivals.map(item => (
+                            <View key={item.id} style={styles.cardContainer}>
+                                <FestivalCard {...item} />
+                                <MusicInfoButtons id={item.id} />
+                            </View>
+                        ))}
+                    </ScrollView>
                 </ScrollView>
-
                 <View style={styles.pagination}>
                     {festivals.map((_, index) => (
                         <View
@@ -103,13 +102,20 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
     wrapper: {
         flex: 1,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: 'white',
     },
     container: {
         flex: 1,
-        paddingTop: 30,
+        backgroundColor: '#f5f5f5',
     },
-    bannerContainer: { width: '100%', paddingHorizontal: 20, marginBottom: 20 },
+    outerScroll: {
+        flex: 1,
+    },
+    bannerContainer: {
+        width: '100%',
+        paddingHorizontal: 20,
+        marginVertical: 20,
+    },
     banner: {
         width: '100%',
         height: 80,
@@ -117,7 +123,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
     },
     scrollContent: {
-        marginBottom: 20,
+        /* 원하는 스타일 삽입 */
     },
     cardContainer: {
         width: width,
